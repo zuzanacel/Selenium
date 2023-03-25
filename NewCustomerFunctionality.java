@@ -2,17 +2,13 @@ import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Random;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -20,10 +16,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 public class NewCustomerFunctionality {
-
-	
-	// declaration of the object webdriver
-	public static WebDriver driver = null; 
 	
 	@BeforeAll
 	public static void beforeALL() {
@@ -36,161 +28,135 @@ public class NewCustomerFunctionality {
 		WebDriverManager.chromedriver().setup();
 		
 		//initalize virtual browser
-		driver = new ChromeDriver();
+		TestData.driver = new ChromeDriver();
 			}
 	
 	@AfterAll
 	public static void afterAll() {
 		// block of code to be executed before each test
-		driver.quit();
+		TestData.driver.quit();
 		//driver.close();
 	}
 	
-	public void loginHappyPath() throws InterruptedException {
-		
-		//enter user id mngr478324
-		driver.findElement(By.name("uid")).sendKeys("mngr483896");
-				
-		//enter password yjAbaga
-		driver.findElement(By.name("password")).sendKeys("azyjYry");
-				
-		//click on submit
-		driver.findElement(By.name("btnLogin")).click();
-	}
-	
 	@Test
-	@Order(5)
 	@DisplayName("Check results on entering a valid information for all fields")
-	public void TC0010() throws InterruptedException {
+	public void TC0011() throws InterruptedException {
 		
 		//open the website
-		driver.get("https://demo.guru99.com/v4/index.php");
+		TestData.driver.get("https://demo.guru99.com/v4/index.php");
 				
 		// wait between steps
 		Thread.sleep(2000);
 				
 		// close the iframe privacy pollicy
-		driver.switchTo().frame("gdpr-consent-notice").findElement(By.id("save")).click();
+		TestData.driver.switchTo().frame("gdpr-consent-notice").findElement(By.id("save")).click();
 		Thread.sleep(2000);
 		
 		//precondition- login function and call this function
-		loginHappyPath();
+		TestData.loginHappyPath();
 		
 		//maximize the screen
-		driver.manage().window().maximize();
+		TestData.driver.manage().window().maximize();
 		
 		//Test steps:
 		
 		//click on new customer
-		driver.findElement(By.linkText("New Customer")).click();
-		driver.get("https://demo.guru99.com/V4/manager/addcustomerpage.php");
+		TestData.driver.findElement(By.linkText("New Customer")).click();
+		TestData.driver.get("https://demo.guru99.com/V4/manager/addcustomerpage.php");
 		
 		//enter customer name, gender, date of birth, address... plus click on submit
-		//Generating a random number
-		Random random = new Random();
-		int randomNumber = random.nextInt(10000);  //12345
-		String email = "adam."+randomNumber+"@guru.ie";
-		System.out.println(email);
 		
-		driver.findElement(By.name("name")).sendKeys("Adam");
-		driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[1]")).click();
-		driver.findElement(By.id("dob")).sendKeys("01/01/1991");
-		driver.findElement(By.name("addr")).sendKeys("47 Testing Road");
-		driver.findElement(By.name("city")).sendKeys("Dublin");
-		driver.findElement(By.name("state")).sendKeys("Dublin");
-		driver.findElement(By.name("pinno")).sendKeys("123456");
-		driver.findElement(By.name("telephoneno")).sendKeys("1234567");
-		driver.findElement(By.name("emailid")).sendKeys(email);
-		driver.findElement(By.name("password")).sendKeys("1234567");
+		TestData.driver.findElement(By.name("name")).sendKeys(TestData.customerName);
+		TestData.driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[1]")).click();
+		TestData.driver.findElement(By.id("dob")).sendKeys(TestData.customerBD);
+		TestData.driver.findElement(By.name("addr")).sendKeys(TestData.customerAddress);
+		TestData.driver.findElement(By.name("city")).sendKeys(TestData.customerCity);
+		TestData.driver.findElement(By.name("state")).sendKeys(TestData.customerState);
+		TestData.driver.findElement(By.name("pinno")).sendKeys(TestData.customerPin);
+		TestData.driver.findElement(By.name("telephoneno")).sendKeys(TestData.customerMobile);
+		TestData.driver.findElement(By.name("emailid")).sendKeys(TestData.email);
+		TestData.driver.findElement(By.name("password")).sendKeys("1234567");
 		
-		driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[14]/td[2]/input[1]")).click();
+		
+		TestData.driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[14]/td[2]/input[1]")).click();
 		
 		//check the success message
 		String expectedResultsCustomerRegistered = "Customer Registered Successfully!!!";
-		String actualResultsCustomerRegistered = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(1) > td > p")).getText();
+		String actualResultsCustomerRegistered = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(1) > td > p")).getText();
 		assertTrue(expectedResultsCustomerRegistered.equals(actualResultsCustomerRegistered));
 		
 		//check the name
-		String expectedResultsCustomerName = "Adam";
-		String actualResultsCustomerName = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(5) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerName.equals(actualResultsCustomerName));
+		String actualResultsCustomerName = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(5) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerName.equals(actualResultsCustomerName));
 		
 		//check the gender
-		String expectedResultsCustomerGender = "male";
-		String actualResultsCustomerGender = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(6) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerGender.equals(actualResultsCustomerGender));
+		String actualResultsCustomerGender = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(6) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerGender.equals(actualResultsCustomerGender));
 		
 		//check the birthdate
-		String expectedResultsCustomerBD = "1991-01-01";
-		String actualResultsCustomerBD = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(7) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerBD.equals(actualResultsCustomerBD));
+		String actualResultsCustomerBD = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(7) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerBD2.equals(actualResultsCustomerBD));
 
 		//check the address
-		String expectedResultsCustomerAddress = "47 Testing Road";
-		String actualResultsCustomerAddress = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(8) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerAddress.equals(actualResultsCustomerAddress));
+		String actualResultsCustomerAddress = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(8) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerAddress.equals(actualResultsCustomerAddress));
 		
 		//check the city
-		String expectedResultsCustomerCity = "Dublin";
-		String actualResultsCustomerCity = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(9) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerCity.equals(actualResultsCustomerCity));
+		String actualResultsCustomerCity = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(9) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerCity.equals(actualResultsCustomerCity));
 
 		//check the state
-		String expectedResultsCustomerState = "Dublin";
-		String actualResultsCustomerState = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(10) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerState.equals(actualResultsCustomerState));
+		String actualResultsCustomerState = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(10) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerState.equals(actualResultsCustomerState));
 		
 		//check the pin
-		String expectedResultsCustomerPin = "123456";
-		String actualResultsCustomerPin = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(11) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerPin.equals(actualResultsCustomerPin));
+		String actualResultsCustomerPin = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(11) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerPin.equals(actualResultsCustomerPin));
 
 		//check the mobile
-		String expectedResultsCustomerMobile = "1234567";
-		String actualResultsCustomerMobile = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(12) > td:nth-child(2)")).getText();
-		assertTrue(expectedResultsCustomerMobile.equals(actualResultsCustomerMobile));
+		String actualResultsCustomerMobile = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(12) > td:nth-child(2)")).getText();
+		assertTrue(TestData.customerMobile.equals(actualResultsCustomerMobile));
 		
 		//check the email
-		String actualResultsCustomerEmail = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(13) > td:nth-child(2)")).getText();
-		assertEquals(email, actualResultsCustomerEmail);
+		String actualResultsCustomerEmail = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(13) > td:nth-child(2)")).getText();
+		assertEquals(TestData.email, actualResultsCustomerEmail);
 		
 		//check if customer ID created and write to console
-		String actualResultsCustomerID = driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(4) > td:nth-child(2)")).getText();
+		String actualResultsCustomerID = TestData.driver.findElement(By.cssSelector("#customer > tbody > tr:nth-child(4) > td:nth-child(2)")).getText();
 		if(actualResultsCustomerID != null) {
 			System.out.println(actualResultsCustomerID);}
 	}
 	
 	@Test
-	@Order(6)
 	@DisplayName("Check results on leaving blank all fields and try to submit the form. ")
-	public void TC0011() throws InterruptedException {
+	public void TC0012() throws InterruptedException {
 		
 		//open the website
-		driver.get("https://demo.guru99.com/v4/index.php");
+		TestData.driver.get("https://demo.guru99.com/v4/index.php");
 				
 		// wait between steps
 		Thread.sleep(2000);
 		
 		//precondition- login function and call this function
-		loginHappyPath();
+		TestData.loginHappyPath();
 		
 		//maximize the screen
-		driver.manage().window().maximize();
+		TestData.driver.manage().window().maximize();
 		
 		//Test steps:
 		
 		//click on new customer
-		driver.findElement(By.linkText("New Customer")).click();
-		driver.get("https://demo.guru99.com/V4/manager/addcustomerpage.php");
+		TestData.driver.findElement(By.linkText("New Customer")).click();
+		TestData.driver.get("https://demo.guru99.com/V4/manager/addcustomerpage.php");
 		
 		//Fields we leave blank
 		
 		//Click on Submit button
-		driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[14]/td[2]/input[1]")).click();
+		TestData.driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[14]/td[2]/input[1]")).click();
 		
 		// popup will be visible "please fill all fields", compare results
 		String expectedResultsCustomerNoData = "please fill all fields";
-		String actualResultsCustomerNoData = driver.switchTo().alert().getText();
+		String actualResultsCustomerNoData = TestData.driver.switchTo().alert().getText();
 		
 		assertTrue(expectedResultsCustomerNoData.equals(actualResultsCustomerNoData));
 		

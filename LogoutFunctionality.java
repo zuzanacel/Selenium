@@ -3,7 +3,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -34,8 +33,8 @@ public class LogoutFunctionality {
 	@AfterAll
 	public static void afterAll() {
 		// block of code to be executed before each test
-		driver.quit();
-		//driver.close();
+		//driver.quit();
+		driver.close();
 	}
 	
 	public void loginHappyPath() throws InterruptedException {
@@ -63,15 +62,11 @@ public class LogoutFunctionality {
 	}
 	
 	@Test
-	@Order(4)
-	@DisplayName("Check results on clicking on the Log Out button")
+	@DisplayName("Check results on clicking on the Log Out button as Manager")
 	public void TC009() throws InterruptedException {
 		
 		//precondition- login function and call this function
 		loginHappyPath();
-		
-		//maximize the screen
-		driver.manage().window().maximize();
 		
 		//Test steps:
 		
@@ -81,6 +76,7 @@ public class LogoutFunctionality {
 		//check the success message
 		String expectedResultsLogout = "You Have Succesfully Logged Out!!";
 		String actualResultsLogout = driver.switchTo().alert().getText();
+		driver.switchTo().alert().accept();
 		assertTrue(expectedResultsLogout.equals(actualResultsLogout));
 
 	}

@@ -1,19 +1,15 @@
 import static org.junit.Assert.assertTrue;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 	public class NewAccountFunctionality {
@@ -62,9 +58,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 		}
 		
 		@Test
-		@Order(7)
 		@DisplayName("Check results on entering a valid information for all fields  (Account type -Savings ) and submit the form")
-		public void TC0034() throws InterruptedException {
+		public void TC035() throws InterruptedException {
 			
 			//Open the website
 			driver.get("https://demo.guru99.com/v4/index.php");
@@ -142,9 +137,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 		}
 		
 		@Test
-		@Order(8)
 		@DisplayName("Check results on entering a valid information for all fields  (Account type -Current ) and submit the form")
-		public void TC0035() throws InterruptedException {
+		public void TC036() throws InterruptedException {
 			
 			//Open the website
 			driver.get("https://demo.guru99.com/v4/index.php");

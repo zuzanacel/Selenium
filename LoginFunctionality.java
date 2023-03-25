@@ -1,6 +1,4 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -155,7 +153,7 @@ public class LoginFunctionality {
 		
 		//compare results
 		assertEquals(expectedResultsNoLogin,actualResultsNoLogin); 
-		assertTrue(expectedResultsNoLogin.equals(actualResultsNoLogin));
+		//assertTrue(expectedResultsNoLogin.equals(actualResultsNoLogin));
 				
 	}
 }
